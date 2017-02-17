@@ -50,6 +50,9 @@ void UGrabber::SetupInputComponent() {
 void UGrabber::Grab() {
 	UE_LOG(LogTemp, Warning, TEXT("Grab pressed"))
 
+	if (!PhysicsHandle) {
+		return;
+	}
 	/// Line trace and see if we reach any actors with physics body collision channel set
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitResult.GetComponent(); // gets the mesh in our case
@@ -68,6 +71,9 @@ void UGrabber::Grab() {
 }
 
 void UGrabber::Release() {
+	if (!PhysicsHandle) {
+		return;
+	}
 	UE_LOG(LogTemp, Warning, TEXT("Grab released"))
 	PhysicsHandle->ReleaseComponent();
 }
@@ -76,6 +82,10 @@ void UGrabber::Release() {
 void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
+
+	if (!PhysicsHandle) {
+		return;
+	}
 
 	// if the physics handle is attached
 	if (PhysicsHandle->GrabbedComponent) {
